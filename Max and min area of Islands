@@ -1,0 +1,112 @@
+/*
+Just like "Max Area of Island" https://leetcode.com/problems/max-area-of-island/description/
+Read in an matrix, calculating the max and min area of islands. 
+The island must be connected 8-directionally.
+The value of one postion presents the area at this position.
+
+Example:
+Input:
+5
+5
+5 5 0 5 5
+5 0 0 0 5
+0 0 5 5 5
+5 0 0 5 5
+5 5 0 0 5
+
+Output:
+45 15
+
+The development environment of ALIBABA interview is quite different from Leetcode=.=
+I spent about 20min getting start...
+BUT I WILL BE OK NEXT TIME =w=
+*/
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <stdbool.h>
+#include <iostream>
+#include <vector>
+#include <limits.h>
+using namespace std;
+
+int search(int row, int col, vector<vector<int>>& A);
+
+vector<int> getMilitaryStrength(int _A_rows, int _A_cols, vector<vector<int>>& A) {
+	cout << "first" << endl;
+	vector<int> ress;
+	for (int i = 0; i < _A_rows; ++i) {
+		for (int j = 0; j < _A_cols; ++j) {
+			if (A[i][j] != 0) {
+				int tmp = search(i, j, A);
+				cout << tmp << endl;
+				ress.push_back(tmp);
+			}
+		}
+	}
+	vector<int> res;
+	int max = 0;
+	int min = INT_MAX;
+	for (int i = 0; i<ress.size(); ++i) {
+		if (ress[i] > max)
+			max = ress[i];
+		if (ress[i] < min)
+			min = ress[i];
+	}
+	res.push_back(max);
+	res.push_back(min);
+	return ress;
+
+}
+
+int search(int row, int col, vector<vector<int>>& A) {
+	int area = A[row][col];
+	int _A_rows = A.size();
+	int _A_cols = A[0].size();
+	A[row][col] = 0;
+	if (row >0 && col >0 && A[row - 1][col - 1] != 0)
+		area += search(row - 1, col - 1, A);
+	if (row >0 && A[row - 1][col] != 0)
+		area += search(row - 1, col, A);
+	if (row >0 && col<_A_cols - 1 && A[row - 1][col + 1] != 0)
+		area += search(row - 1, col + 1, A);
+	if (col>0 && A[row][col - 1] != 0)
+		area += search(row, col - 1, A);
+	if (row<_A_rows - 1 && col>0 && A[row + 1][col - 1] != 0)
+		area += search(row + 1, col - 1, A);
+	if (row<_A_rows - 1 && A[row + 1][col] != 0)
+		area += search(row + 1, col, A);
+	if (row<_A_rows - 1 && col<_A_cols - 1 && A[row + 1][col + 1] != 0)
+		area += search(row + 1, col + 1, A);
+	if (col<_A_cols - 1 && A[row][col + 1] != 0)
+		area += search(row, col + 1, A);
+	
+	return area;
+}
+
+int main() {
+	vector<int> res;
+
+	int _A_rows = 0;
+	int _A_cols = 0;
+	std::cin >> _A_rows >> _A_cols;
+	vector<vector<int>> _A(_A_rows, vector<int>(_A_cols, 0));
+	for (int i = 0; i < _A_rows; ++i) {
+		for (int j = 0; j < _A_cols; ++j) {
+			cin >> _A[i][j];
+		}
+	}
+	
+	res = getMilitaryStrength(_A_rows, _A_cols, _A);
+	
+	for (int i = 0; i < res.size(); ++i) {
+		cout << res[i];
+		if (i == res.size() - 1)
+			break;
+		cout << " ";
+	}
+	system("pause");
+	return 0;
+
+}
