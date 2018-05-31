@@ -1,0 +1,52 @@
+// Coding question
+
+// 1 -> 2 -> 3 -> 4 -> 5
+// 1 -> 3 -> 5 -> 4 -> 2
+
+
+class Solution{
+public:
+    ListNode* ListDivide(ListNode* head){
+        if(head == NULL || head->next == NULL)
+            return head;
+        ListNode* end = head->next;
+        ListNode* orihead = head;
+        int flag = 0;
+        while(head->next != NULL){
+            ListNode* tmp = head->next;
+            if(tmp->next != NULL){
+                head->next = tmp->next;
+                head = head->next;
+                if(flag == 0){
+                    flag = 1;
+                }else{
+                    tmp->next = end;
+                    end = tmp;
+                }
+            }else{
+                head->next = NULL;
+                if(flag == 0){
+                    flag = 1;
+                }else{
+                    tmp->next = end;
+                    end = tmp;
+                }
+            }
+        }
+        head->next = end;
+        return orihead;
+        
+    }
+};
+/*
+系统设计：
+外卖软件商家客户端系统设计
+商家客户端菜品管理，菜品类如何设计
+抽象为肉类，菜类，火锅，粥等等，鸡肉猪肉牛肉继承肉类，青菜白菜继承菜类，抽象的肉类和菜类都有加入套餐的功能，在子类中重写加入套餐的函数。同时建立一个套餐的抽象类。
+类内有addMeat, addVeg这样的函数，参数是抽象的肉，也可是具体的肉的对象。
+--设计模式
+
+
+具体项目技术细节：
+数据传输的带宽，数据大小，实时性要求，图像算法的细节。
+*/
